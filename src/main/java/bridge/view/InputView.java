@@ -7,22 +7,63 @@ import static camp.nextstep.edu.missionutils.Console.*;
  */
 public class InputView {
 
-    // TODO: validation은 다른 패키지에서
-
     /**
      * 다리의 길이를 입력받는다.
      */
-    public String readBridgeSize() {
+    public int readBridgeSize() {
         System.out.println("다리의 길이를 입력해주세요.");
-        return readLine();
+        String input = readLine();
+        validateBridgeSize(input);
+        return Integer.parseInt(input);
     }
+
+    private void validateBridgeSize(String input) {
+        hasValue(input);
+        isNumeric(input);
+    }
+
+    private void hasValue(String input) {
+        if (input == null || input.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    private void isNumeric(String input) {
+        for (int i = 0; i < input.length(); i++) {
+            if (!Character.isDigit(input.charAt(i))) {
+                throw new IllegalArgumentException();
+            }
+        }
+    }
+
 
     /**
      * 사용자가 이동할 칸을 입력받는다.
      */
     public String readMoving() {
         System.out.println("이동할 칸을 선택해주세요. (위: U, 아래: D)");
-        return readLine();
+        String input = readLine();
+        validateChar(input);
+        return input;
+    }
+
+    private void validateChar(String input) {
+        hasValue(input);
+        isRightLength(input);
+        isAlphabet(input);
+    }
+
+    private static void isRightLength(String input) {
+        if (input.length() != 1) {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    private void isAlphabet(String input) {
+        char target = input.charAt(0);
+        if (!Character.isAlphabetic(target)) {
+            throw new IllegalArgumentException();
+        }
     }
 
     /**
@@ -30,6 +71,9 @@ public class InputView {
      */
     public String readGameCommand() {
         System.out.println("게임을 다시 시도할지 여부를 입력해주세요. (재시도: R, 종료: Q");
-        return readLine();
+        String input = readLine();
+        validateChar(input);
+        return input;
     }
+
 }
