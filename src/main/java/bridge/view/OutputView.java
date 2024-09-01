@@ -1,5 +1,12 @@
 package bridge.view;
 
+import bridge.constant.ConstMessage;
+import bridge.domain.BridgeGame;
+import bridge.domain.BridgeMap;
+
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 사용자에게 게임 진행 상황과 결과를 출력하는 역할을 한다.
  */
@@ -9,7 +16,7 @@ public class OutputView {
      * 게임 시작 문구 출력
      */
     public void printStartGame() {
-        System.out.println("다리 건너기 게임을 시작합니다.");
+        System.out.println(ConstMessage.START_GAME.getValue());
     }
 
     /**
@@ -17,7 +24,7 @@ public class OutputView {
      * <p>
      * 출력을 위해 필요한 메서드의 인자(parameter)는 자유롭게 추가하거나 변경할 수 있다.
      */
-    public void printMap() {
+    public void printMap(BridgeMap map) {
     }
 
     /**
@@ -32,14 +39,14 @@ public class OutputView {
      * 게임 성공 여부 출력
      */
     public void printIsSuccess(String isSuccess) {
-        System.out.println("게임 성공 여부: " + isSuccess);
+        System.out.println(ConstMessage.IS_SUCCESS.getValue() + isSuccess);
     }
 
     /**
      * 시도 횟수 출력
      */
-    public void printTryCount(int tryCount) {
-        System.out.println("총 시도한 횟수: " + tryCount);
+    public void printTryCount(BridgeGame bridgeGame) {
+        System.out.println(ConstMessage.TRY_COUNT.getValue() + bridgeGame.getTryCount() + 1);
     }
 
     /**

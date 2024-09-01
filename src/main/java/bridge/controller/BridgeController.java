@@ -1,8 +1,8 @@
 package bridge.controller;
 
-import bridge.BridgeMaker;
-import bridge.BridgeNumberGenerator;
-import bridge.BridgeRandomNumberGenerator;
+import bridge.constant.ConstMessage;
+import bridge.constant.ConstNumber;
+import bridge.constant.ErrorMessage;
 import bridge.domain.BridgeGame;
 import bridge.domain.BridgeMap;
 import bridge.service.BridgeService;
@@ -17,12 +17,14 @@ public class BridgeController {
     private final OutputView outputView = new OutputView();
     private BridgeService bridgeService;
 
+    final String errorMsg = "[ERROR]";
+
     public void run() {
         startGame();
         playBridgeGame(makeNewBridge());
     }
 
-    // TODO: 서비스 계층과 역할 분담 -> 어떻게?
+    // TODO: 사용자 입력값에 대한 유효성 검증은 어디서?
 
     /**
      * 게임 시작
@@ -47,8 +49,8 @@ public class BridgeController {
     }
 
     public void isValidSize(int bridgeSize) {
-        if (bridgeSize < 3 || bridgeSize > 20) {
-            throw new IllegalArgumentException("[ERROR] 다리의 길이는 3과 20 사이여야 합니다.");
+        if (bridgeSize < ConstNumber.MIN_SIZE.getSize() || bridgeSize > ConstNumber.MAX_SIZE.getSize()) {
+            throw new IllegalArgumentException(ErrorMessage.INVALID_SIZE.getValue());
         }
     }
 
@@ -62,6 +64,7 @@ public class BridgeController {
 
         for (int i = 0; i < bridge.size(); i++) {
             bridgeMap = passOneKan(i);
+            outputView.printMap(bridgeMap);
             if (whenFail(bridgeMap, bridgeGame)) {
                 return;
             }
@@ -96,8 +99,8 @@ public class BridgeController {
     }
 
     public void isValidMoving(String moving) {
-        if (!moving.equals("U") && !moving.equals("D")) {
-            throw new IllegalArgumentException("[ERROR] 이동할 칸은 U 또는 D여야 합니다.");
+        if (!moving.equals(ConstMessage.UP.getValue()) && !moving.equals(ConstMessage.DOWN.getValue())) {
+            throw new IllegalArgumentException(ErrorMessage.INVALID_MOVING.getValue());
         }
     }
 
@@ -125,11 +128,11 @@ public class BridgeController {
     public boolean restartGame() {
         String gameCommand = readValidGameCommand();
 
-        if (gameCommand.equals("R")) return true;
-        if (gameCommand.equals("Q")) return false;
+        if (gameCommand.equals(ConstMessage.RESTART.getValue())) return true;
+        if (gameCommand.equals(ConstMessage.QUIT.getValue())) return false;
 
         // TODO: 이부분도 다시 입력받아야 하나? 이미 R/Q 유효성 검사 마쳤는데?
-        throw new IllegalArgumentException("[ERROR]");
+        throw new IllegalArgumentException(errorMsg);
     }
 
     /**
@@ -148,8 +151,8 @@ public class BridgeController {
     }
 
     public void isValidGameCommand(String gameCommand) {
-        if (!gameCommand.equals("R") && !gameCommand.equals("Q")) {
-            throw new IllegalArgumentException("[ERROR] 게임 재시도 여부는 R 또는 Q여야 합니다");
+        if (!gameCommand.equals(ConstMessage.RESTART.getValue()) && !gameCommand.equals(ConstMessage.QUIT.getValue())) {
+            throw new IllegalArgumentException(ErrorMessage.INVALID_GAME_COMMAND.getValue());
         }
     }
 
@@ -157,9 +160,9 @@ public class BridgeController {
      * 게임 종료 출력
      */
     private void printEndGame(BridgeGame bridgeGame, boolean flag) {
-        String result = "성공";
+        String result = ConstMessage.SUCCESS.getValue();
         if (!flag) {
-            result = "실패";
+            result = ConstMessage.FAIL.getValue();
         }
 
         outputView.printResult(); // TODO: 이거 완성하기

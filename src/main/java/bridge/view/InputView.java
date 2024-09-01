@@ -1,5 +1,8 @@
 package bridge.view;
 
+import bridge.constant.ConstMessage;
+import bridge.constant.ErrorMessage;
+
 import static camp.nextstep.edu.missionutils.Console.*;
 
 /**
@@ -13,7 +16,7 @@ public class InputView {
     public int readBridgeSize() {
         while (true) {
             try {
-                System.out.println("다리의 길이를 입력해주세요.");
+                System.out.println(ConstMessage.READ_BRIDGE_SIZE.getValue());
                 String input = readLine();
                 validateBridgeSize(input);
                 return Integer.parseInt(input);
@@ -33,14 +36,14 @@ public class InputView {
 
     private void hasValue(String input) {
         if (input == null || input.isEmpty()) {
-            throw new IllegalArgumentException("[ERROR] 입력값이 비어있습니다.");
+            throw new IllegalArgumentException(ErrorMessage.HAS_NOT_VALUE.getValue());
         }
     }
 
     private void isNumeric(String input) {
         for (int i = 0; i < input.length(); i++) {
             if (!Character.isDigit(input.charAt(i))) {
-                throw new IllegalArgumentException("[ERROR] 숫자가 아닙니다.");
+                throw new IllegalArgumentException(ErrorMessage.IS_NOT_NUMBER.getValue());
             }
         }
     }
@@ -51,7 +54,7 @@ public class InputView {
     public String readMoving() {
         while (true) {
             try {
-                System.out.println("이동할 칸을 선택해주세요. (위: U, 아래: D)");
+                System.out.println(ConstMessage.READ_MOVING.getValue());
                 String input = readLine();
                 validateChar(input);
                 return input;
@@ -67,7 +70,7 @@ public class InputView {
     public String readGameCommand() {
         while (true) {
             try {
-                System.out.println("게임을 다시 시도할지 여부를 입력해주세요. (재시도: R, 종료: Q");
+                System.out.println(ConstMessage.READ_GAME_COMMAND.getValue());
                 String input = readLine();
                 validateChar(input);
                 return input;
@@ -88,14 +91,14 @@ public class InputView {
 
     private static void isRightLength(String input) {
         if (input.length() != 1) {
-            throw new IllegalArgumentException("[ERROR] 문자 하나만 입력해야 합니다.");
+            throw new IllegalArgumentException(ErrorMessage.IS_WRONG_LENGTH.getValue());
         }
     }
 
     private void isAlphabet(String input) {
         char target = input.charAt(0);
         if (!Character.isAlphabetic(target)) {
-            throw new IllegalArgumentException("[ERROR] 알파벳을 입력해야 합니다.");
+            throw new IllegalArgumentException(ErrorMessage.IS_NOT_ALPHABET.getValue());
         }
     }
 

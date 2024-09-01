@@ -1,5 +1,7 @@
 package bridge.domain;
 
+import bridge.constant.ConstMessage;
+
 import java.util.List;
 
 /**
@@ -34,10 +36,10 @@ public class BridgeGame {
      */
     public BridgeMap move(String moving, int index) {
         if (moving.equals(bridge.get(index))) {
-            bridgeMap.addMap(moving, "O");
+            bridgeMap.addMap(moving, ConstMessage.POSSIBLE.getValue());
             return bridgeMap;
         }
-        bridgeMap.addMap(moving, "X");
+        bridgeMap.addMap(moving, ConstMessage.IMPOSSIBLE.getValue());
         return bridgeMap;
     }
 
