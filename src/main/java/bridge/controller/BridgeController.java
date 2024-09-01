@@ -5,6 +5,7 @@ import bridge.BridgeNumberGenerator;
 import bridge.BridgeRandomNumberGenerator;
 import bridge.domain.BridgeGame;
 import bridge.domain.BridgeMap;
+import bridge.service.BridgeService;
 import bridge.view.InputView;
 import bridge.view.OutputView;
 
@@ -14,6 +15,7 @@ public class BridgeController {
 
     private final InputView inputView = new InputView();
     private final OutputView outputView = new OutputView();
+    private BridgeService bridgeService;
 
     public void run() {
         startGame();
@@ -37,7 +39,7 @@ public class BridgeController {
             try {
                 int bridgeSize = inputView.readBridgeSize();
                 isValidSize(bridgeSize);
-                return getNewBridge(bridgeSize);
+                return bridgeService.getNewBridge(bridgeSize);
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
             }
@@ -50,55 +52,36 @@ public class BridgeController {
         }
     }
 
-    public List<String> getNewBridge(int count) {
-        BridgeNumberGenerator bridgeNumberGenerator = new BridgeRandomNumberGenerator();
-        BridgeMaker bridgeMaker = new BridgeMaker(bridgeNumberGenerator);
-        return bridgeMaker.makeBridge(count);
-    }
-
     /**
-     * 다리 건너는 동작
-     *
+     * 다리 건너기 시작
      */
     public void playBridgeGame(List<String> bridge) {
         BridgeGame bridgeGame = new BridgeGame(bridge);
+        bridgeService = new BridgeService(bridgeGame);
         BridgeMap bridgeMap;
 
         for (int i = 0; i < bridge.size(); i++) {
-            bridgeMap = passOneKan(bridgeGame, i);
-            whenFail(bridgeMap, bridgeGame);
-            return;
+            bridgeMap = passOneKan(i);
+            if (whenFail(bridgeMap, bridgeGame)) {
+                return;
+            }
         }
 
         printEndGame(bridgeGame, true);
     }
 
-    private void whenFail(BridgeMap bridgeMap, BridgeGame bridgeGame) {
-        if (isFail(bridgeMap)) {
-
-            if (restartGame()) {
-                bridgeGame.retry();
-                playBridgeGame(bridgeGame.getBridge());
-            }
-
-            printEndGame(bridgeGame, false);
-        }
-    }
-
-    private boolean isFail(BridgeMap bridgeMap) {
-        return bridgeMap.getAllMap().containsValue("X");
-    }
-
-    public BridgeMap passOneKan(BridgeGame bridgeGame, int i) {
-        BridgeMap bridgeMap;
+    public BridgeMap passOneKan(int index) {
         String moving = readValidMoving();
 
-        bridgeMap = bridgeGame.move(moving, i);
+        BridgeMap bridgeMap = bridgeService.processMove(moving, index);
         outputView.printMap(bridgeMap);
 
         return bridgeMap;
     }
 
+    /**
+     * 이동할 칸 입력 유효성 검사
+     */
     private String readValidMoving() {
         String moving;
         while (true) {
@@ -118,10 +101,26 @@ public class BridgeController {
         }
     }
 
+    /**
+     * 게임에 실패한 경우
+     */
+    private boolean whenFail(BridgeMap bridgeMap, BridgeGame bridgeGame) {
+        if (bridgeService.isFail(bridgeMap)) {
+
+            if (restartGame()) {
+                bridgeService.restart();
+                playBridgeGame(bridgeGame.getBridge());
+            }
+
+            printEndGame(bridgeGame, false);
+            return true;
+        }
+        return false;
+    }
+
 
     /**
      * 게임 재시작
-     *
      */
     public boolean restartGame() {
         String gameCommand = readValidGameCommand();
@@ -129,9 +128,13 @@ public class BridgeController {
         if (gameCommand.equals("R")) return true;
         if (gameCommand.equals("Q")) return false;
 
-        throw new IllegalArgumentException(); // R, Q 모두 아닌 경우
+        // TODO: 이부분도 다시 입력받아야 하나? 이미 R/Q 유효성 검사 마쳤는데?
+        throw new IllegalArgumentException("[ERROR]");
     }
 
+    /**
+     * 게임 재시작 여부 입력 유효성 검사
+     */
     private String readValidGameCommand() {
         while (true) {
             try {
@@ -150,6 +153,9 @@ public class BridgeController {
         }
     }
 
+    /**
+     * 게임 종료 출력
+     */
     private void printEndGame(BridgeGame bridgeGame, boolean flag) {
         String result = "성공";
         if (!flag) {
