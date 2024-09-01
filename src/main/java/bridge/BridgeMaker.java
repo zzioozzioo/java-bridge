@@ -22,17 +22,19 @@ public class BridgeMaker {
      */
     public List<String> makeBridge(int size) {
         List<String> bridgeList = new ArrayList<>();
-        int randomNum;
 
         for (int i = 0; i < size; i++) {
-            randomNum = bridgeNumberGenerator.generate();
-            if (randomNum == 0) {
-                bridgeList.add("D");
-                continue;
-            }
-            bridgeList.add("U");
+            makeOneKan(bridgeList);
         }
-
         return bridgeList;
+    }
+
+    private void makeOneKan(List<String> bridgeList) {
+        int randomNum = bridgeNumberGenerator.generate();
+        if (randomNum == 0) {
+            bridgeList.add("D");
+            return;
+        }
+        bridgeList.add("U");
     }
 }
