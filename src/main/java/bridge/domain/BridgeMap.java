@@ -10,8 +10,15 @@ public class BridgeMap {
         this.bridgeMap = bridgeMap;
     }
 
-    public BridgeMap addMap(String move, String possible) {
-        bridgeMap.put(move, possible);
-        return this;
+    public void addMap(String moving, String possible) {
+        bridgeMap.put(moving, possible);
+    }
+
+    public HashMap<String, String> getAllMap() {
+        return this.bridgeMap;
+    }
+
+    public void resetMap() {
+        this.bridgeMap.clear();
     }
 }
