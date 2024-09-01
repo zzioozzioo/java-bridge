@@ -12,15 +12,13 @@ import java.util.List;
 
 public class BridgeController {
 
-    private InputView inputView = new InputView();
-    private OutputView outputView = new OutputView();
+    private final InputView inputView = new InputView();
+    private final OutputView outputView = new OutputView();
 
     public void run() {
 
         startGame();
-        List<String> bridge = makeNewBridge();
-
-        passBridge(bridge);
+        playBridgeGame(makeNewBridge());
 
     }
 
@@ -56,25 +54,32 @@ public class BridgeController {
      * 다리 건너는 동작
      *
      */
-    public void passBridge(List<String> bridge) {
+    public void playBridgeGame(List<String> bridge) {
         BridgeGame bridgeGame = new BridgeGame(bridge);
         BridgeMap bridgeMap;
 
         for (int i = 0; i < bridge.size(); i++) {
             bridgeMap = passOneKan(bridgeGame, i);
-            if (checkFail(bridge, bridgeMap, bridgeGame))
-                return;
+            whenFail(bridgeMap, bridgeGame);
         }
-        printEndGame(bridgeGame);
+
+        printEndGame(bridgeGame, true);
     }
 
-    private boolean checkFail(List<String> bridge, BridgeMap bridgeMap, BridgeGame bridgeGame) {
-        if (bridgeMap.getAllMap().containsValue("X")) {
-            if (restartGame(bridge, bridgeGame)) {
-                return true;
+    private void whenFail(BridgeMap bridgeMap, BridgeGame bridgeGame) {
+        if (isFail(bridgeMap)) {
+
+            if (restartGame()) {
+                bridgeGame.retry();
+                playBridgeGame(bridgeGame.getBridge());
             }
+
+            printEndGame(bridgeGame, false);
         }
-        return false;
+    }
+
+    private boolean isFail(BridgeMap bridgeMap) {
+        return bridgeMap.getAllMap().containsValue("X");
     }
 
     public BridgeMap passOneKan(BridgeGame bridgeGame, int i) {
@@ -101,18 +106,12 @@ public class BridgeController {
      * 게임 재시작
      *
      */
-    public boolean restartGame(List<String> bridge, BridgeGame bridgeGame) {
+    public boolean restartGame() {
         String gameCommand = inputView.readGameCommand();
         isValidGameCommand(gameCommand);
-        if (gameCommand.equals("R")) {
-            bridgeGame.addCount();
-            passBridge(bridge);
-        }
-        if (gameCommand.equals("Q")) {
-            // 게임 최종 결과 출력 및 종료
-            printEndGame(bridgeGame);
-            return false;
-        }
+
+        if (gameCommand.equals("R")) return true;
+        if (gameCommand.equals("Q")) return false;
 
         throw new IllegalArgumentException(); // R, Q 모두 아닌 경우
     }
@@ -123,9 +122,14 @@ public class BridgeController {
         }
     }
 
-    private void printEndGame(BridgeGame bridgeGame) {
+    private void printEndGame(BridgeGame bridgeGame, boolean flag) {
+        String result = "성공";
+        if (!flag) {
+            result = "실패";
+        }
+
         outputView.printResult(); // TODO: 이거 완성하기
-        outputView.printIsSuccess("실패");
+        outputView.printIsSuccess(result);
         outputView.printTryCount(bridgeGame);
     }
 }
