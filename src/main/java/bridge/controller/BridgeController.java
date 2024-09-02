@@ -5,6 +5,7 @@ import bridge.constant.ConstNumber;
 import bridge.constant.ErrorMessage;
 import bridge.domain.BridgeGame;
 import bridge.domain.BridgeMap;
+import bridge.domain.BridgeMove;
 import bridge.service.BridgeService;
 import bridge.view.InputView;
 import bridge.view.OutputView;
@@ -26,7 +27,8 @@ public class BridgeController {
         BridgeGame bridgeGame = new BridgeGame(bridge);
         bridgeService = new BridgeService(bridgeGame);
         startGame();
-        playBridgeGame(makeNewBridge(bridgeService));
+        makeNewBridge(bridgeService);
+        playBridgeGame(bridgeService);
     }
 
     /**
@@ -39,12 +41,13 @@ public class BridgeController {
     /**
      * 새로운 다리 생성
      */
-    public List<String> makeNewBridge(BridgeService bridgeService) {
+    public void makeNewBridge(BridgeService bridgeService) {
         while (true) {
             try {
                 int bridgeSize = inputView.readBridgeSize();
                 isValidSize(bridgeSize);
-                return bridgeService.getNewBridge(bridgeSize);
+                bridgeService.getNewBridge(bridgeSize);
+                return;
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
             }
@@ -60,22 +63,25 @@ public class BridgeController {
     /**
      * 다리 건너기 시작
      */
-    public void playBridgeGame(List<String> bridge) {
+    public void playBridgeGame(BridgeService bridgeService) {
 
         BridgeMap bridgeMap;
+        List<String> bridge = bridgeService.getBridgeGame().getBridge();
 
         for (int i = 0; i < bridge.size(); i++) {
-            bridgeMap = passOneKan(i);
+            bridgeMap = passOneKan(i, bridgeService.getBridgeGame());
             if (whenFail(bridgeMap, bridgeService.getBridgeGame())) return;
         }
 
         printEndGame(bridgeService.getBridgeGame(), true);
     }
 
-    public BridgeMap passOneKan(int index) {
+    public BridgeMap passOneKan(int index, BridgeGame bridgeGame) {
         String moving = readValidMoving();
 
-        BridgeMap bridgeMap = bridgeService.processMove(moving, index);
+        BridgeMove bridgeMove = new BridgeMove(moving, index);
+
+        BridgeMap bridgeMap = bridgeService.processMove(bridgeMove, bridgeGame);
         outputView.printMap(bridgeMap);
 
         return bridgeMap;
@@ -112,7 +118,7 @@ public class BridgeController {
 
             if (restartGame()) {
                 bridgeService.restart();
-                playBridgeGame(bridgeGame.getBridge());
+                playBridgeGame(bridgeService);
             }
 
             printEndGame(bridgeGame, false);
