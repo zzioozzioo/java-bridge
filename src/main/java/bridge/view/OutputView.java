@@ -25,6 +25,27 @@ public class OutputView {
      * 출력을 위해 필요한 메서드의 인자(parameter)는 자유롭게 추가하거나 변경할 수 있다.
      */
     public void printMap(BridgeMap map) {
+        HashMap<String, String> bridgeMap = map.getAllMap();
+        // TODO: 출력 형식대로 출력하는 건 나중에,,
+        // TODO: 띄어쓰기, 다리 칸 구분은 어떻게?
+
+        StringBuilder up = new StringBuilder();
+        StringBuilder down = new StringBuilder();
+
+        for (Map.Entry<String, String> entry : bridgeMap.entrySet()) {
+            if (entry.getKey().equals(ConstMessage.UP.getValue())) {
+                up.append(entry.getValue());
+                down.append(" ");
+            }
+            if (entry.getKey().equals(ConstMessage.DOWN.getValue())) {
+                down.append(entry.getValue());
+                up.append(" ");
+            }
+
+        }
+
+        System.out.println("[" + up + "]");
+        System.out.println("[" + down + "]");
     }
 
     /**
@@ -46,7 +67,7 @@ public class OutputView {
      * 시도 횟수 출력
      */
     public void printTryCount(BridgeGame bridgeGame) {
-        System.out.println(ConstMessage.TRY_COUNT.getValue() + bridgeGame.getTryCount() + 1);
+        System.out.println(ConstMessage.TRY_COUNT.getValue() + (bridgeGame.getTryCount() + 1));
     }
 
     /**
