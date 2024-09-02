@@ -6,8 +6,7 @@ import bridge.BridgeRandomNumberGenerator;
 import bridge.constant.ConstMessage;
 import bridge.domain.BridgeGame;
 import bridge.domain.BridgeMap;
-
-import java.util.List;
+import bridge.domain.BridgeMove;
 
 public class BridgeService {
 
@@ -20,14 +19,14 @@ public class BridgeService {
         return bridgeGame;
     }
 
-    public List<String> getNewBridge(int count) {
+    public void getNewBridge(int count) {
         BridgeNumberGenerator bridgeNumberGenerator = new BridgeRandomNumberGenerator();
         BridgeMaker bridgeMaker = new BridgeMaker(bridgeNumberGenerator);
-        return bridgeMaker.makeBridge(count);
+        bridgeGame.setNewBridge(bridgeMaker.makeBridge(count));
     }
 
-    public BridgeMap processMove(String moving, int index) {
-        return bridgeGame.move(moving, index);
+    public BridgeMap processMove(BridgeMove bridgeMove, BridgeGame bridgeGame) {
+        return bridgeGame.move(bridgeMove, bridgeGame);
     }
 
     public boolean isFail(BridgeMap bridgeMap) {
