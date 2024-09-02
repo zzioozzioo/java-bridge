@@ -26,6 +26,7 @@ public class BridgeController {
         List<String> bridge = new ArrayList<>();
         BridgeGame bridgeGame = new BridgeGame(bridge);
         bridgeService = new BridgeService(bridgeGame);
+
         startGame();
         makeNewBridge(bridgeService);
         playBridgeGame(bridgeService);
@@ -64,7 +65,6 @@ public class BridgeController {
      * 다리 건너기 시작
      */
     public void playBridgeGame(BridgeService bridgeService) {
-
         BridgeMap bridgeMap;
         List<String> bridge = bridgeService.getBridgeGame().getBridge();
 
@@ -78,7 +78,6 @@ public class BridgeController {
 
     public BridgeMap passOneKan(int index, BridgeGame bridgeGame) {
         String moving = readValidMoving();
-
         BridgeMove bridgeMove = new BridgeMove(moving, index);
 
         BridgeMap bridgeMap = bridgeService.processMove(bridgeMove, bridgeGame);
@@ -115,12 +114,12 @@ public class BridgeController {
      */
     public boolean whenFail(BridgeMap bridgeMap, BridgeGame bridgeGame) {
         if (bridgeService.isFail(bridgeMap)) {
-
             if (restartGame()) {
                 bridgeService.restart();
                 playBridgeGame(bridgeService);
+                return true;
             }
-
+            // TODO: playBridgeGame() 호출하고 printEndGame()을 또 호출해버리니까 두번 호출됨..
             printEndGame(bridgeGame, false);
             return true;
         }
@@ -137,7 +136,7 @@ public class BridgeController {
         if (gameCommand.equals(ConstMessage.RESTART.getValue())) return true;
         if (gameCommand.equals(ConstMessage.QUIT.getValue())) return false;
 
-        // TODO: 이부분도 다시 입력받아야 하나? 이미 R/Q 유효성 검사 마쳤는데?
+        // TODO: 이부분도 다시 입력받아야 하나? 이미 R/Q 유효성 검사 마쳤는데? 아닐 듯,,
         throw new IllegalArgumentException(errorMsg);
     }
 
