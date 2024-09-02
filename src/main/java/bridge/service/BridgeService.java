@@ -3,6 +3,7 @@ package bridge.service;
 import bridge.BridgeMaker;
 import bridge.BridgeNumberGenerator;
 import bridge.BridgeRandomNumberGenerator;
+import bridge.constant.ConstMessage;
 import bridge.domain.BridgeGame;
 import bridge.domain.BridgeMap;
 
@@ -13,6 +14,10 @@ public class BridgeService {
     private final BridgeGame bridgeGame;
     public BridgeService(BridgeGame bridgeGame) {
         this.bridgeGame = bridgeGame;
+    }
+
+    public BridgeGame getBridgeGame() {
+        return bridgeGame;
     }
 
     public List<String> getNewBridge(int count) {
@@ -26,7 +31,7 @@ public class BridgeService {
     }
 
     public boolean isFail(BridgeMap bridgeMap) {
-        return bridgeMap.getAllMap().containsValue("X");
+        return bridgeMap.getAllMap().containsValue(ConstMessage.IMPOSSIBLE.getValue());
     }
 
     public void restart() {
