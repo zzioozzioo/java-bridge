@@ -9,6 +9,7 @@ import bridge.service.BridgeService;
 import bridge.view.InputView;
 import bridge.view.OutputView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BridgeController {
@@ -19,12 +20,14 @@ public class BridgeController {
 
     final String errorMsg = "[ERROR]";
 
+    // TODO: 도메인 로직 분리 다시 확인해보기 + 도메인 로직에서 수행할 수 있는 기능들? + 유효성 검증?
     public void run() {
+        List<String> bridge = new ArrayList<>();
+        BridgeGame bridgeGame = new BridgeGame(bridge);
+        bridgeService = new BridgeService(bridgeGame);
         startGame();
-        playBridgeGame(makeNewBridge());
+        playBridgeGame(makeNewBridge(bridgeService));
     }
-
-    // TODO: 사용자 입력값에 대한 유효성 검증은 어디서?
 
     /**
      * 게임 시작
@@ -36,7 +39,7 @@ public class BridgeController {
     /**
      * 새로운 다리 생성
      */
-    public List<String> makeNewBridge() {
+    public List<String> makeNewBridge(BridgeService bridgeService) {
         while (true) {
             try {
                 int bridgeSize = inputView.readBridgeSize();
@@ -58,19 +61,15 @@ public class BridgeController {
      * 다리 건너기 시작
      */
     public void playBridgeGame(List<String> bridge) {
-        BridgeGame bridgeGame = new BridgeGame(bridge);
-        bridgeService = new BridgeService(bridgeGame);
+
         BridgeMap bridgeMap;
 
         for (int i = 0; i < bridge.size(); i++) {
             bridgeMap = passOneKan(i);
-            outputView.printMap(bridgeMap);
-            if (whenFail(bridgeMap, bridgeGame)) {
-                return;
-            }
+            if (whenFail(bridgeMap, bridgeService.getBridgeGame())) return;
         }
 
-        printEndGame(bridgeGame, true);
+        printEndGame(bridgeService.getBridgeGame(), true);
     }
 
     public BridgeMap passOneKan(int index) {
@@ -85,7 +84,7 @@ public class BridgeController {
     /**
      * 이동할 칸 입력 유효성 검사
      */
-    private String readValidMoving() {
+    public String readValidMoving() {
         String moving;
         while (true) {
             try {
@@ -99,7 +98,8 @@ public class BridgeController {
     }
 
     public void isValidMoving(String moving) {
-        if (!moving.equals(ConstMessage.UP.getValue()) && !moving.equals(ConstMessage.DOWN.getValue())) {
+        if (!moving.equals(ConstMessage.UP.getValue())
+                && !moving.equals(ConstMessage.DOWN.getValue())) {
             throw new IllegalArgumentException(ErrorMessage.INVALID_MOVING.getValue());
         }
     }
@@ -107,7 +107,7 @@ public class BridgeController {
     /**
      * 게임에 실패한 경우
      */
-    private boolean whenFail(BridgeMap bridgeMap, BridgeGame bridgeGame) {
+    public boolean whenFail(BridgeMap bridgeMap, BridgeGame bridgeGame) {
         if (bridgeService.isFail(bridgeMap)) {
 
             if (restartGame()) {
@@ -138,7 +138,7 @@ public class BridgeController {
     /**
      * 게임 재시작 여부 입력 유효성 검사
      */
-    private String readValidGameCommand() {
+    public String readValidGameCommand() {
         while (true) {
             try {
                 String gameCommand = inputView.readGameCommand();
@@ -159,7 +159,7 @@ public class BridgeController {
     /**
      * 게임 종료 출력
      */
-    private void printEndGame(BridgeGame bridgeGame, boolean flag) {
+    public void printEndGame(BridgeGame bridgeGame, boolean flag) {
         String result = ConstMessage.SUCCESS.getValue();
         if (!flag) {
             result = ConstMessage.FAIL.getValue();
