@@ -2,6 +2,7 @@ package bridge.domain;
 
 import bridge.constant.ConstMessage;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -29,12 +30,28 @@ public class BridgeGame {
         return bridge;
     }
 
+    public BridgeMap getBridgeMap() {
+        if (this.bridgeMap == null) {
+            this.bridgeMap = new BridgeMap(new HashMap<>());
+        }
+        return this.bridgeMap;
+    }
+
+    public void setNewBridge(List<String> bridge) {
+        this.bridge = bridge;
+    }
+
     /**
      * 사용자가 칸을 이동할 때 사용하는 메서드
      * <p>
      * 이동을 위해 필요한 메서드의 반환 타입(return type), 인자(parameter)는 자유롭게 추가하거나 변경할 수 있다.
      */
-    public BridgeMap move(String moving, int index) {
+    public BridgeMap move(BridgeMove bridgeMove, BridgeGame bridgeGame) {
+        String moving = bridgeMove.getMoving();
+        int index = bridgeMove.getIndex();
+        List<String> bridge = bridgeGame.getBridge();
+        BridgeMap bridgeMap = bridgeGame.getBridgeMap();
+
         if (moving.equals(bridge.get(index))) {
             bridgeMap.addMap(moving, ConstMessage.POSSIBLE.getValue());
             return bridgeMap;
