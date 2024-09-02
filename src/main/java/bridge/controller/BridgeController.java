@@ -113,17 +113,24 @@ public class BridgeController {
      * 게임에 실패한 경우
      */
     public boolean whenFail(BridgeMap bridgeMap, BridgeGame bridgeGame) {
-        if (bridgeService.isFail(bridgeMap)) {
-            if (restartGame()) {
-                bridgeService.restart();
-                playBridgeGame(bridgeService);
-                return true;
-            }
-            // TODO: playBridgeGame() 호출하고 printEndGame()을 또 호출해버리니까 두번 호출됨..
-            printEndGame(bridgeGame, false);
+        if (!bridgeService.isFail(bridgeMap)) {
+            return false;
+        }
+        if (restartGame()) {
+            restartAndPlayAgain();
             return true;
         }
-        return false;
+        endGame(bridgeGame);
+        return true;
+    }
+
+    public void restartAndPlayAgain() {
+        bridgeService.restart();
+        playBridgeGame(bridgeService);
+    }
+
+    public void endGame(BridgeGame bridgeGame) {
+        printEndGame(bridgeGame, false);
     }
 
 
