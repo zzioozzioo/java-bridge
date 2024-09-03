@@ -1,6 +1,7 @@
 package bridge.view;
 
 import bridge.constant.ConstMessage;
+import bridge.constant.Direction;
 import bridge.domain.BridgeGame;
 import bridge.domain.BridgeMap;
 
@@ -33,11 +34,11 @@ public class OutputView {
         StringBuilder down = new StringBuilder();
 
         for (Map.Entry<String, String> entry : bridgeMap.entrySet()) {
-            if (entry.getKey().equals(ConstMessage.UP.getValue())) {
+            if (entry.getKey().equals(Direction.UP.getDirection())) {
                 up.append(entry.getValue());
                 down.append(" ");
             }
-            if (entry.getKey().equals(ConstMessage.DOWN.getValue())) {
+            if (entry.getKey().equals(Direction.DOWN.getDirection())) {
                 down.append(entry.getValue());
                 up.append(" ");
             }
@@ -53,7 +54,9 @@ public class OutputView {
      * <p>
      * 출력을 위해 필요한 메서드의 인자(parameter)는 자유롭게 추가하거나 변경할 수 있다.
      */
-    public void printResult() {
+    public void printResult(BridgeMap bridgeMap) {
+        System.out.println(ConstMessage.GAME_RESULT.getValue());
+        // TODO: 최종 결과 출력
     }
 
     /**
@@ -70,9 +73,4 @@ public class OutputView {
         System.out.println(ConstMessage.TRY_COUNT.getValue() + (bridgeGame.getTryCount() + 1));
     }
 
-    /**
-     * 에러 문구 출력?
-     */
-    public void printErrorMessage() {
-    }
 }

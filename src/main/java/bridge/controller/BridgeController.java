@@ -1,7 +1,6 @@
 package bridge.controller;
 
-import bridge.constant.ConstMessage;
-import bridge.constant.ConstNumber;
+import bridge.constant.*;
 import bridge.domain.BridgeGame;
 import bridge.domain.BridgeMap;
 import bridge.domain.BridgeMove;
@@ -104,8 +103,7 @@ public class BridgeController {
     }
 
     public void isValidMoving(String moving) {
-        if (!moving.equals(ConstMessage.UP.getValue())
-                && !moving.equals(ConstMessage.DOWN.getValue())) {
+        if (!moving.equals(Direction.UP.getDirection()) && !moving.equals(Direction.DOWN.getDirection())) {
             throw new InvalidMovingException();
         }
     }
@@ -141,8 +139,8 @@ public class BridgeController {
     public boolean restartGame() {
         String gameCommand = readValidGameCommand();
 
-        if (gameCommand.equals(ConstMessage.RESTART.getValue())) return true;
-        if (gameCommand.equals(ConstMessage.QUIT.getValue())) return false;
+        if (gameCommand.equals(Command.RESTART.getCommand())) return true;
+        if (gameCommand.equals(Command.QUIT.getCommand())) return false;
 
         // TODO: 이부분도 다시 입력받아야 하나? 이미 R/Q 유효성 검사 마쳤는데? 아닐 듯,,
         throw new IllegalArgumentException(errorMsg);
@@ -164,7 +162,7 @@ public class BridgeController {
     }
 
     public void isValidGameCommand(String gameCommand) {
-        if (!gameCommand.equals(ConstMessage.RESTART.getValue()) && !gameCommand.equals(ConstMessage.QUIT.getValue())) {
+        if (!gameCommand.equals(Command.RESTART.getCommand()) && !gameCommand.equals(Command.QUIT.getCommand())) {
             throw new InvalidGameCommandException();
         }
     }
@@ -173,9 +171,9 @@ public class BridgeController {
      * 게임 종료 출력
      */
     public void printEndGame(BridgeGame bridgeGame, boolean flag) {
-        String result = ConstMessage.SUCCESS.getValue();
+        String result = String.valueOf(Result.SUCCESS.getResult());
         if (!flag) {
-            result = ConstMessage.FAIL.getValue();
+            result = String.valueOf(Result.FAIL.getResult());
         }
 
         outputView.printResult(bridgeGame.getBridgeMap()); // TODO: 이거 완성하기
