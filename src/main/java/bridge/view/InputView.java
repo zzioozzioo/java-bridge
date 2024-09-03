@@ -1,7 +1,7 @@
 package bridge.view;
 
 import bridge.constant.ConstMessage;
-import bridge.constant.ErrorMessage;
+import bridge.exception.*;
 
 import static camp.nextstep.edu.missionutils.Console.*;
 
@@ -20,7 +20,7 @@ public class InputView {
                 String input = readLine();
                 validateBridgeSize(input);
                 return Integer.parseInt(input);
-            } catch (IllegalArgumentException e) {
+            } catch (HasNotValueException | IsNotNumberException e) {
                 System.out.println(e.getMessage());
             }
         }
@@ -36,14 +36,14 @@ public class InputView {
 
     private void hasValue(String input) {
         if (input == null || input.isEmpty()) {
-            throw new IllegalArgumentException(ErrorMessage.HAS_NOT_VALUE.getValue());
+            throw new HasNotValueException();
         }
     }
 
     private void isNumeric(String input) {
         for (int i = 0; i < input.length(); i++) {
             if (!Character.isDigit(input.charAt(i))) {
-                throw new IllegalArgumentException(ErrorMessage.IS_NOT_NUMBER.getValue());
+                throw new IsNotNumberException();
             }
         }
     }
@@ -58,7 +58,7 @@ public class InputView {
                 String input = readLine();
                 validateChar(input);
                 return input;
-            } catch (IllegalArgumentException e) {
+            } catch (HasNotValueException | IsWrongLengthException | IsNotAlphabetException e) {
                 System.out.println(e.getMessage());
             }
         }
@@ -74,7 +74,7 @@ public class InputView {
                 String input = readLine();
                 validateChar(input);
                 return input;
-            } catch (IllegalArgumentException e) {
+            } catch (HasNotValueException | IsWrongLengthException | IsNotAlphabetException e) {
                 System.out.println(e.getMessage());
             }
         }
@@ -91,14 +91,14 @@ public class InputView {
 
     private static void isRightLength(String input) {
         if (input.length() != 1) {
-            throw new IllegalArgumentException(ErrorMessage.IS_WRONG_LENGTH.getValue());
+            throw new IsWrongLengthException();
         }
     }
 
     private void isAlphabet(String input) {
         char target = input.charAt(0);
         if (!Character.isAlphabetic(target)) {
-            throw new IllegalArgumentException(ErrorMessage.IS_NOT_ALPHABET.getValue());
+            throw new IsNotAlphabetException();
         }
     }
 
