@@ -14,20 +14,20 @@ public class BridgeGame {
     List<String> bridge;
     BridgeMap bridgeMap;
 
-    public void addCount() {
-        this.tryCount++;
-    }
-
     public int getTryCount() {
         return tryCount;
     }
 
-    public BridgeGame(List<String> bridge) {
-        this.bridge = bridge;
+    public void addCount() {
+        this.tryCount++;
     }
 
     public List<String> getBridge() {
         return bridge;
+    }
+
+    public void setNewBridge(List<String> bridge) {
+        this.bridge = bridge;
     }
 
     public BridgeMap getBridgeMap() {
@@ -37,7 +37,7 @@ public class BridgeGame {
         return this.bridgeMap;
     }
 
-    public void setNewBridge(List<String> bridge) {
+    public BridgeGame(List<String> bridge) {
         this.bridge = bridge;
     }
 
@@ -52,12 +52,17 @@ public class BridgeGame {
         List<String> bridge = bridgeGame.getBridge();
         BridgeMap bridgeMap = bridgeGame.getBridgeMap();
 
-        if (moving.equals(bridge.get(index))) {
-            bridgeMap.addMap(moving, ConstMessage.POSSIBLE.getValue());
-            return bridgeMap;
-        }
-        bridgeMap.addMap(moving, ConstMessage.IMPOSSIBLE.getValue());
+        String result = evaluateMoveResult(moving, bridge.get(index));
+        bridgeMap.addMap(moving, result);
+
         return bridgeMap;
+    }
+
+    private String evaluateMoveResult(String moving, String target) {
+        if (moving.equals(target)) {
+            return ConstMessage.POSSIBLE.getValue();
+        }
+        return ConstMessage.IMPOSSIBLE.getValue();
     }
 
     /**
