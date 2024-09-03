@@ -2,10 +2,12 @@ package bridge.controller;
 
 import bridge.constant.ConstMessage;
 import bridge.constant.ConstNumber;
-import bridge.constant.ErrorMessage;
 import bridge.domain.BridgeGame;
 import bridge.domain.BridgeMap;
 import bridge.domain.BridgeMove;
+import bridge.exception.InvalidBridgeSizeException;
+import bridge.exception.InvalidGameCommandException;
+import bridge.exception.InvalidMovingException;
 import bridge.service.BridgeService;
 import bridge.view.InputView;
 import bridge.view.OutputView;
@@ -21,7 +23,6 @@ public class BridgeController {
 
     final String errorMsg = "[ERROR]";
 
-    // TODO: 도메인 로직 분리 다시 확인해보기 + 도메인 로직에서 수행할 수 있는 기능들? + 유효성 검증?
     public void run() {
         List<String> bridge = new ArrayList<>();
         BridgeGame bridgeGame = new BridgeGame(bridge);
@@ -49,7 +50,7 @@ public class BridgeController {
                 isValidSize(bridgeSize);
                 bridgeService.getNewBridge(bridgeSize);
                 return;
-            } catch (IllegalArgumentException e) {
+            } catch (InvalidBridgeSizeException e) {
                 System.out.println(e.getMessage());
             }
         }
@@ -57,7 +58,7 @@ public class BridgeController {
 
     public void isValidSize(int bridgeSize) {
         if (bridgeSize < ConstNumber.MIN_SIZE.getSize() || bridgeSize > ConstNumber.MAX_SIZE.getSize()) {
-            throw new IllegalArgumentException(ErrorMessage.INVALID_SIZE.getValue());
+            throw new InvalidBridgeSizeException();
         }
     }
 
@@ -96,7 +97,7 @@ public class BridgeController {
                 moving = inputView.readMoving();
                 isValidMoving(moving);
                 return moving;
-            } catch (IllegalArgumentException e) {
+            } catch (InvalidMovingException e) {
                 System.out.println(e.getMessage());
             }
         }
@@ -105,7 +106,7 @@ public class BridgeController {
     public void isValidMoving(String moving) {
         if (!moving.equals(ConstMessage.UP.getValue())
                 && !moving.equals(ConstMessage.DOWN.getValue())) {
-            throw new IllegalArgumentException(ErrorMessage.INVALID_MOVING.getValue());
+            throw new InvalidMovingException();
         }
     }
 
@@ -156,7 +157,7 @@ public class BridgeController {
                 String gameCommand = inputView.readGameCommand();
                 isValidGameCommand(gameCommand);
                 return gameCommand;
-            } catch (IllegalArgumentException e) {
+            } catch (InvalidGameCommandException e) {
                 System.out.println(e.getMessage());
             }
         }
@@ -164,7 +165,7 @@ public class BridgeController {
 
     public void isValidGameCommand(String gameCommand) {
         if (!gameCommand.equals(ConstMessage.RESTART.getValue()) && !gameCommand.equals(ConstMessage.QUIT.getValue())) {
-            throw new IllegalArgumentException(ErrorMessage.INVALID_GAME_COMMAND.getValue());
+            throw new InvalidGameCommandException();
         }
     }
 
@@ -177,7 +178,7 @@ public class BridgeController {
             result = ConstMessage.FAIL.getValue();
         }
 
-        outputView.printResult(); // TODO: 이거 완성하기
+        outputView.printResult(bridgeGame.getBridgeMap()); // TODO: 이거 완성하기
         outputView.printIsSuccess(result);
         outputView.printTryCount(bridgeGame);
     }
