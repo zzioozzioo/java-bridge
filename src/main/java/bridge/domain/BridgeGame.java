@@ -52,17 +52,17 @@ public class BridgeGame {
         List<String> bridge = bridgeGame.getBridge();
         BridgeMap bridgeMap = bridgeGame.getBridgeMap();
 
-        String result = evaluateMoveResult(moving, bridge.get(index));
-        bridgeMap.addMap(moving, result);
+        ConstMessage result = evaluateMoveResult(moving, bridge.get(index));
+        bridgeMap.addMap(moving, result.getValue());
 
         return bridgeMap;
     }
 
-    private String evaluateMoveResult(String moving, String target) {
+    private ConstMessage evaluateMoveResult(String moving, String target) {
         if (moving.equals(target)) {
-            return ConstMessage.POSSIBLE.getValue();
+            return ConstMessage.POSSIBLE;
         }
-        return ConstMessage.IMPOSSIBLE.getValue();
+        return ConstMessage.IMPOSSIBLE;
     }
 
     /**
