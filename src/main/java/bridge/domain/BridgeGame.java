@@ -1,6 +1,6 @@
 package bridge.domain;
 
-import bridge.constant.ConstMessage;
+import bridge.constant.Status;
 
 import java.util.HashMap;
 import java.util.List;
@@ -52,17 +52,17 @@ public class BridgeGame {
         List<String> bridge = bridgeGame.getBridge();
         BridgeMap bridgeMap = bridgeGame.getBridgeMap();
 
-        ConstMessage result = evaluateMoveResult(moving, bridge.get(index));
-        bridgeMap.addMap(moving, result.getValue());
+        Status result = evaluateMoveResult(moving, bridge.get(index));
+        bridgeMap.addMap(moving, result.getStatus());
 
         return bridgeMap;
     }
 
-    private ConstMessage evaluateMoveResult(String moving, String target) {
+    private Status evaluateMoveResult(String moving, String target) {
         if (moving.equals(target)) {
-            return ConstMessage.POSSIBLE;
+            return Status.POSSIBLE;
         }
-        return ConstMessage.IMPOSSIBLE;
+        return Status.IMPOSSIBLE;
     }
 
     /**
