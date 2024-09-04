@@ -1,4 +1,4 @@
-package bridge.constant;
+package bridge.domain;
 
 public enum Status {
     POSSIBLE("O"),

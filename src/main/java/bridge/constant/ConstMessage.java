@@ -1,5 +1,8 @@
 package bridge.constant;
 
+import bridge.domain.Command;
+import bridge.domain.Direction;
+
 public enum ConstMessage {
 
     START_GAME("다리 건너기 게임을 시작합니다.", "MESSAGE"),
@@ -8,7 +11,8 @@ public enum ConstMessage {
     READ_GAME_COMMAND("게임을 다시 시도할지 여부를 입력해주세요. (재시도: " + Command.RESTART.getCommand() + ", 종료: " + Command.QUIT.getCommand() + ")", "MESSAGE"),
     GAME_RESULT("최종 게임 결과", "MESSAGE"),
     IS_SUCCESS("게임 성공 여부: ", "MESSAGE"),
-    TRY_COUNT("총 시도한 횟수: ", "MESSAGE");
+    TRY_COUNT("총 시도한 횟수: ", "MESSAGE"),
+    ERROR_MESSAGE("[ERROR]", "MESSAGE");
 
 
     final String value;

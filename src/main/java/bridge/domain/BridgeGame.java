@@ -1,8 +1,5 @@
 package bridge.domain;
 
-import bridge.constant.Status;
-
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -32,7 +29,7 @@ public class BridgeGame {
 
     public BridgeMap getBridgeMap() {
         if (this.bridgeMap == null) {
-            this.bridgeMap = new BridgeMap(new HashMap<>());
+            this.bridgeMap = new BridgeMap();
         }
         return this.bridgeMap;
     }
@@ -47,19 +44,21 @@ public class BridgeGame {
      * 이동을 위해 필요한 메서드의 반환 타입(return type), 인자(parameter)는 자유롭게 추가하거나 변경할 수 있다.
      */
     public BridgeMap move(BridgeMove bridgeMove, BridgeGame bridgeGame) {
-        String moving = bridgeMove.getMoving();
+        String direction = bridgeMove.getDirection();
         int index = bridgeMove.getIndex();
         List<String> bridge = bridgeGame.getBridge();
         BridgeMap bridgeMap = bridgeGame.getBridgeMap();
 
-        Status result = evaluateMoveResult(moving, bridge.get(index));
-        bridgeMap.addMap(moving, result.getStatus());
+        Status status = evaluateMoveResult(direction, bridge.get(index));
+        bridgeMap.addMap(direction, status.getStatus());
 
         return bridgeMap;
     }
 
-    private Status evaluateMoveResult(String moving, String target) {
-        if (moving.equals(target)) {
+    private Status evaluateMoveResult(String direction, String target) {
+
+        // TODO: Result랑 엮어서 다시 로직 짜보기
+        if (direction.equals(target)) {
             return Status.POSSIBLE;
         }
         return Status.IMPOSSIBLE;

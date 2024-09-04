@@ -1,7 +1,6 @@
 package bridge.exception;
 
-import bridge.constant.ConstMessage;
-import bridge.constant.Direction;
+import bridge.domain.Direction;
 
 public class InvalidMovingException extends IllegalArgumentException{
 

@@ -1,7 +1,6 @@
 package bridge.exception;
 
-import bridge.constant.Command;
-import bridge.constant.ConstMessage;
+import bridge.domain.Command;
 
 public class InvalidGameCommandException extends IllegalArgumentException {
     private static final String ERROR_MESSAGE = "[ERROR] 게임 재시도 여부는 "

@@ -2,16 +2,16 @@ package bridge.domain;
 
 public class BridgeMove {
 
-    private final String moving;
+    private final Direction direction;
     private final int index;
 
-    public BridgeMove(String move, int index) {
-        this.moving = move;
+    public BridgeMove(Direction direction, int index) {
+        this.direction = direction;
         this.index = index;
     }
 
-    public String getMoving() {
-        return moving;
+    public String getDirection() {
+        return direction.getDirection();
     }
 
     public int getIndex() {
