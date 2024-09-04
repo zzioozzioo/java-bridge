@@ -49,19 +49,10 @@ public class BridgeGame {
         List<String> bridge = bridgeGame.getBridge();
         BridgeMap bridgeMap = bridgeGame.getBridgeMap();
 
-        Status status = evaluateMoveResult(direction, bridge.get(index));
+        Status status = Status.matchStatus(direction, bridge.get(index));
         bridgeMap.addMap(direction, status.getStatus());
 
         return bridgeMap;
-    }
-
-    private Status evaluateMoveResult(String direction, String target) {
-
-        // TODO: Result랑 엮어서 다시 로직 짜보기
-        if (direction.equals(target)) {
-            return Status.POSSIBLE;
-        }
-        return Status.IMPOSSIBLE;
     }
 
     /**
