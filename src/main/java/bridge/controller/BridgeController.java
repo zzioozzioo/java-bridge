@@ -1,9 +1,6 @@
 package bridge.controller;
 
-import bridge.constant.*;
-import bridge.domain.BridgeGame;
-import bridge.domain.BridgeMap;
-import bridge.domain.BridgeMove;
+import bridge.domain.*;
 import bridge.exception.InvalidBridgeSizeException;
 import bridge.exception.InvalidGameCommandException;
 import bridge.exception.InvalidMovingException;
@@ -14,13 +11,15 @@ import bridge.view.OutputView;
 import java.util.ArrayList;
 import java.util.List;
 
+import static bridge.domain.Direction.matchDirection;
+import static bridge.domain.Command.matchCommand;
+
 public class BridgeController {
 
     private final InputView inputView = new InputView();
     private final OutputView outputView = new OutputView();
     private BridgeService bridgeService;
 
-    final String errorMsg = "[ERROR]";
 
     public void run() {
         List<String> bridge = new ArrayList<>();
@@ -56,9 +55,7 @@ public class BridgeController {
     }
 
     public void isValidSize(int bridgeSize) {
-        if (bridgeSize < ConstNumber.MIN_SIZE.getSize() || bridgeSize > ConstNumber.MAX_SIZE.getSize()) {
-            throw new InvalidBridgeSizeException();
-        }
+        Range.validateSize(bridgeSize);
     }
 
     /**
@@ -77,9 +74,11 @@ public class BridgeController {
     }
 
     public BridgeMap passOneKan(int index, BridgeGame bridgeGame) {
-        String moving = readValidMoving();
-        BridgeMove bridgeMove = new BridgeMove(moving, index);
+        String strDirection = readValidMoving();
+        Direction direction = matchDirection(strDirection);
+        BridgeMove bridgeMove = new BridgeMove(direction, index);
 
+        // TODO: 해시맵 말고 리스트로 다시 구현하기
         BridgeMap bridgeMap = bridgeService.processMove(bridgeMove, bridgeGame);
         outputView.printMap(bridgeMap);
 
@@ -103,9 +102,7 @@ public class BridgeController {
     }
 
     public void isValidMoving(String moving) {
-        if (!moving.equals(Direction.UP.getDirection()) && !moving.equals(Direction.DOWN.getDirection())) {
-            throw new InvalidMovingException();
-        }
+        matchDirection(moving);
     }
 
     /**
@@ -138,12 +135,9 @@ public class BridgeController {
      */
     public boolean restartGame() {
         String gameCommand = readValidGameCommand();
+        Command command = matchCommand(gameCommand);
 
-        if (gameCommand.equals(Command.RESTART.getCommand())) return true;
-        if (gameCommand.equals(Command.QUIT.getCommand())) return false;
-
-        // TODO: 이부분도 다시 입력받아야 하나? 이미 R/Q 유효성 검사 마쳤는데? 아닐 듯,,
-        throw new IllegalArgumentException(errorMsg);
+        return command.isEqualCommand(Command.RESTART.getCommand());
     }
 
     /**
@@ -162,19 +156,15 @@ public class BridgeController {
     }
 
     public void isValidGameCommand(String gameCommand) {
-        if (!gameCommand.equals(Command.RESTART.getCommand()) && !gameCommand.equals(Command.QUIT.getCommand())) {
-            throw new InvalidGameCommandException();
-        }
+        matchCommand(gameCommand);
     }
 
     /**
      * 게임 종료 출력
      */
     public void printEndGame(BridgeGame bridgeGame, boolean flag) {
-        String result = String.valueOf(Result.SUCCESS.getResult());
-        if (!flag) {
-            result = String.valueOf(Result.FAIL.getResult());
-        }
+
+        String result = Result.determineResult(flag);
 
         outputView.printResult(bridgeGame.getBridgeMap()); // TODO: 이거 완성하기
         outputView.printIsSuccess(result);
