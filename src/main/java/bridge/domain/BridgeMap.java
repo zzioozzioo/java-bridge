@@ -1,24 +1,53 @@
 package bridge.domain;
 
-import java.util.HashMap;
+import bridge.exception.InvalidMovingException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BridgeMap {
 
-    private final HashMap<String, String> bridgeMap;
+    private final List<String> upStatus;
+    private final List<String> downStatus;
 
-    public BridgeMap(HashMap<String, String> bridgeMap) {
-        this.bridgeMap = bridgeMap;
+    public BridgeMap() {
+        this.upStatus = new ArrayList<>();
+        this.downStatus = new ArrayList<>();
     }
 
-    public void addMap(String moving, String possible) {
-        bridgeMap.put(moving, possible);
+    public List<String> getUpStatus() {
+        return upStatus;
     }
 
-    public HashMap<String, String> getAllMap() {
-        return this.bridgeMap;
+    public List<String> getDownStatus() {
+        return downStatus;
+    }
+
+    public void addMap(String direction, String status) {
+        if (direction.equals(Direction.UP.getDirection())) {
+            upStatus.add(status);
+            downStatus.add(" ");
+            return;
+        }
+
+        if (direction.equals(Direction.DOWN.getDirection())) {
+            downStatus.add(status);
+            upStatus.add(" ");
+            return;
+        }
+
+        throw new InvalidMovingException();
+    }
+
+    public boolean containFail(BridgeMap bridgeMap) {
+        boolean up = bridgeMap.upStatus.contains(Status.IMPOSSIBLE.getStatus());
+        boolean down = bridgeMap.upStatus.contains(Status.IMPOSSIBLE.getStatus());
+
+        return up || down;
     }
 
     public void resetMap() {
-        this.bridgeMap.clear();
+        this.upStatus.clear();
+        this.downStatus.clear();
     }
 }
