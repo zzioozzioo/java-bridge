@@ -5,8 +5,6 @@ import java.util.StringJoiner;
 
 public class BridgePrinter {
 
-    final String errorMsg = "[ERROR]";
-
     StringJoiner upStringJoiner;
     StringJoiner downStringJoiner;
 
@@ -15,21 +13,10 @@ public class BridgePrinter {
         this.downStringJoiner = new StringJoiner(" | ", "[ ", " ]");
     }
 
-    public String matchStatusToDisplay(String status) {
-        for (Status s : Status.values()) {
-            if (status.equals(s.getStatus())) {
-                return status;
-            }
-        }
-        throw new IllegalArgumentException(errorMsg);
-    }
 
     public void addStepBridge(String upStep, String downStep) {
-        String upMoveResult = matchStatusToDisplay(upStep);
-        String downMoveResult = matchStatusToDisplay(downStep);
-
-        upStringJoiner.add(upMoveResult);
-        downStringJoiner.add(downMoveResult);
+        upStringJoiner.add(upStep);
+        downStringJoiner.add(downStep);
     }
 
     public void addAllBridge(List<String> upStatus, List<String> downStatus) {
