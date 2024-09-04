@@ -2,7 +2,8 @@ package bridge.domain;
 
 public enum Status {
     POSSIBLE("O"),
-    IMPOSSIBLE("X");
+    IMPOSSIBLE("X"),
+    EMPTY(" ");
 
     final String status;
 
