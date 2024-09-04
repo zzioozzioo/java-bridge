@@ -1,12 +1,11 @@
 package bridge.view;
 
 import bridge.constant.ConstMessage;
-import bridge.constant.Direction;
 import bridge.domain.BridgeGame;
 import bridge.domain.BridgeMap;
+import bridge.domain.BridgePrinter;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 /**
  * 사용자에게 게임 진행 상황과 결과를 출력하는 역할을 한다.
@@ -25,28 +24,15 @@ public class OutputView {
      * <p>
      * 출력을 위해 필요한 메서드의 인자(parameter)는 자유롭게 추가하거나 변경할 수 있다.
      */
-    public void printMap(BridgeMap map) {
-        HashMap<String, String> bridgeMap = map.getAllMap();
-        // TODO: 출력 형식대로 출력하는 건 나중에,,
-        // TODO: 띄어쓰기, 다리 칸 구분은 어떻게?
+    public void printMap(BridgeMap bridgeMap) {
 
-        StringBuilder up = new StringBuilder();
-        StringBuilder down = new StringBuilder();
+        List<String> upStatus = bridgeMap.getUpStatus();
+        List<String> downStatus = bridgeMap.getDownStatus();
+        BridgePrinter bridgePrinter = new BridgePrinter();
 
-        for (Map.Entry<String, String> entry : bridgeMap.entrySet()) {
-            if (entry.getKey().equals(Direction.UP.getDirection())) {
-                up.append(entry.getValue());
-                down.append(" ");
-            }
-            if (entry.getKey().equals(Direction.DOWN.getDirection())) {
-                down.append(entry.getValue());
-                up.append(" ");
-            }
+        bridgePrinter.addAllBridge(upStatus, downStatus);
 
-        }
-
-        System.out.println("[" + up + "]");
-        System.out.println("[" + down + "]");
+        System.out.println(bridgePrinter.print());
     }
 
     /**
@@ -57,6 +43,13 @@ public class OutputView {
     public void printResult(BridgeMap bridgeMap) {
         System.out.println(ConstMessage.GAME_RESULT.getValue());
         // TODO: 최종 결과 출력
+        List<String> upStatus = bridgeMap.getUpStatus();
+        List<String> downStatus = bridgeMap.getDownStatus();
+        BridgePrinter bridgePrinter = new BridgePrinter();
+
+        bridgePrinter.addAllBridge(upStatus, downStatus);
+
+        System.out.println(bridgePrinter.print());
     }
 
     /**
