@@ -1,7 +1,5 @@
 package bridge;
 
-import bridge.BridgeNumberGenerator;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +27,7 @@ public class BridgeMaker {
         return bridgeList;
     }
 
-    private void makeOneKan(List<String> bridgeList) {
+    public void makeOneKan(List<String> bridgeList) {
         int randomNum = bridgeNumberGenerator.generate();
         if (randomNum == 0) {
             bridgeList.add("D");

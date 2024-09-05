@@ -29,19 +29,19 @@ public class InputView {
     /**
      * 다리 길이 유효성 검사
      */
-    private void validateBridgeSize(String input) {
+    public void validateBridgeSize(String input) {
         hasValue(input);
         isNumeric(input);
     }
 
-    private void hasValue(String input) {
-        if (input == null || input.isEmpty()) {
+    public void hasValue(String input) {
+        if (input == null || input.trim().isEmpty()) {
             throw new HasNotValueException();
         }
     }
 
-    private void isNumeric(String input) {
-        for (int i = 0; i < input.length(); i++) {
+    public void isNumeric(String input) {
+        for (int i = 0; i < input.trim().length(); i++) {
             if (!Character.isDigit(input.charAt(i))) {
                 throw new IsNotNumberException();
             }
@@ -83,20 +83,20 @@ public class InputView {
     /**
      * 알파벳 유효성 검사
      */
-    private void validateChar(String input) {
+    public void validateChar(String input) {
         hasValue(input);
         isRightLength(input);
         isAlphabet(input);
     }
 
-    private static void isRightLength(String input) {
-        if (input.length() != 1) {
+    public void isRightLength(String input) {
+        if (input.trim().length() != 1) {
             throw new IsWrongLengthException();
         }
     }
 
-    private void isAlphabet(String input) {
-        char target = input.charAt(0);
+    public void isAlphabet(String input) {
+        char target = input.trim().charAt(0);
         if (!Character.isAlphabetic(target)) {
             throw new IsNotAlphabetException();
         }
