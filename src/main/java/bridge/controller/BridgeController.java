@@ -76,10 +76,10 @@ public class BridgeController {
     public BridgeMap passOneKan(int index, BridgeGame bridgeGame) {
         String strDirection = readValidMoving();
         Direction direction = matchDirection(strDirection);
-        BridgeMove bridgeMove = new BridgeMove(direction, index);
 
-        // TODO: 해시맵 말고 리스트로 다시 구현하기
+        BridgeMove bridgeMove = new BridgeMove(direction, index);
         BridgeMap bridgeMap = bridgeService.processMove(bridgeMove, bridgeGame);
+
         outputView.printMap(bridgeMap);
 
         return bridgeMap;
@@ -89,10 +89,9 @@ public class BridgeController {
      * 이동할 칸 입력 유효성 검사
      */
     public String readValidMoving() {
-        String moving;
         while (true) {
             try {
-                moving = inputView.readMoving();
+                String moving = inputView.readMoving();
                 isValidMoving(moving);
                 return moving;
             } catch (InvalidMovingException e) {
@@ -108,6 +107,7 @@ public class BridgeController {
     /**
      * 게임에 실패한 경우
      */
+    // TODO: 도메인 로직으로 분리,, 다시 수정해보기
     public boolean whenFail(BridgeMap bridgeMap, BridgeGame bridgeGame) {
         if (!bridgeService.isFail(bridgeMap)) {
             return false;
@@ -137,7 +137,7 @@ public class BridgeController {
         String gameCommand = readValidGameCommand();
         Command command = matchCommand(gameCommand);
 
-        return command.isEqualCommand(Command.RESTART.getCommand());
+        return command.isEqualToRestartCommand(Command.RESTART.getCommand());
     }
 
     /**
@@ -164,9 +164,9 @@ public class BridgeController {
      */
     public void printEndGame(BridgeGame bridgeGame, boolean flag) {
 
-        String result = Result.determineResult(flag);
+        String result = Result.matchResult(flag);
 
-        outputView.printResult(bridgeGame.getBridgeMap()); // TODO: 이거 완성하기
+        outputView.printResult(bridgeGame.getBridgeMap());
         outputView.printIsSuccess(result);
         outputView.printTryCount(bridgeGame);
     }

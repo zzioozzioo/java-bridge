@@ -14,7 +14,7 @@ public enum Result {
         return result;
     }
 
-    public static String determineResult(boolean flag) {
+    public static String matchResult(boolean flag) {
 
         if (!flag) {
             return String.valueOf(FAIL.getResult());
