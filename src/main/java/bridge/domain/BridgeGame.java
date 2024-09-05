@@ -7,7 +7,7 @@ import java.util.List;
  */
 public class BridgeGame {
 
-    int tryCount;
+    int tryCount = 1;
     List<String> bridge;
     BridgeMap bridgeMap;
 
