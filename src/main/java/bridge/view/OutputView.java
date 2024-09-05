@@ -25,7 +25,6 @@ public class OutputView {
      * 출력을 위해 필요한 메서드의 인자(parameter)는 자유롭게 추가하거나 변경할 수 있다.
      */
     public void printMap(BridgeMap bridgeMap) {
-
         List<String> upStatus = bridgeMap.getUpStatus();
         List<String> downStatus = bridgeMap.getDownStatus();
         BridgePrinter bridgePrinter = new BridgePrinter();
@@ -42,14 +41,7 @@ public class OutputView {
      */
     public void printResult(BridgeMap bridgeMap) {
         System.out.println(ConstMessage.GAME_RESULT.getValue());
-        // TODO: 최종 결과 출력
-        List<String> upStatus = bridgeMap.getUpStatus();
-        List<String> downStatus = bridgeMap.getDownStatus();
-        BridgePrinter bridgePrinter = new BridgePrinter();
-
-        bridgePrinter.addAllBridge(upStatus, downStatus);
-
-        System.out.println(bridgePrinter.print());
+        printMap(bridgeMap);
     }
 
     /**
@@ -63,7 +55,7 @@ public class OutputView {
      * 시도 횟수 출력
      */
     public void printTryCount(BridgeGame bridgeGame) {
-        System.out.println(ConstMessage.TRY_COUNT.getValue() + (bridgeGame.getTryCount() + 1));
+        System.out.println(ConstMessage.TRY_COUNT.getValue() + (bridgeGame.getTryCount()));
     }
 
 }
