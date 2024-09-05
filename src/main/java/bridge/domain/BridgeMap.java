@@ -41,7 +41,7 @@ public class BridgeMap {
 
     public boolean containFail(BridgeMap bridgeMap) {
         boolean up = bridgeMap.upStatus.contains(Status.IMPOSSIBLE.getStatus());
-        boolean down = bridgeMap.upStatus.contains(Status.IMPOSSIBLE.getStatus());
+        boolean down = bridgeMap.downStatus.contains(Status.IMPOSSIBLE.getStatus());
 
         return up || down;
     }
