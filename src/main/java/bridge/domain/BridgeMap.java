@@ -24,19 +24,28 @@ public class BridgeMap {
     }
 
     public void addMap(String direction, String status) {
+        if (upDirection(direction, status)) return;
+        if (downDirection(direction, status)) return;
+
+        throw new InvalidMovingException();
+    }
+
+    public boolean upDirection(String direction, String status) {
         if (direction.equals(Direction.UP.getDirection())) {
             upStatus.add(status);
             downStatus.add(" ");
-            return;
+            return true;
         }
+        return false;
+    }
 
+    public boolean downDirection(String direction, String status) {
         if (direction.equals(Direction.DOWN.getDirection())) {
             downStatus.add(status);
             upStatus.add(" ");
-            return;
+            return true;
         }
-
-        throw new InvalidMovingException();
+        return false;
     }
 
     public boolean containFail(BridgeMap bridgeMap) {
