@@ -3,7 +3,6 @@ package bridge.service;
 import bridge.BridgeMaker;
 import bridge.BridgeNumberGenerator;
 import bridge.BridgeRandomNumberGenerator;
-import bridge.constant.Status;
 import bridge.domain.BridgeGame;
 import bridge.domain.BridgeMap;
 import bridge.domain.BridgeMove;
@@ -30,7 +29,7 @@ public class BridgeService {
     }
 
     public boolean isFail(BridgeMap bridgeMap) {
-        return bridgeMap.getAllMap().containsValue(Status.IMPOSSIBLE.getStatus());
+        return bridgeMap.containFail(bridgeMap);
     }
 
     public void restart() {
