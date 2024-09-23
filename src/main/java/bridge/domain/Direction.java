@@ -4,17 +4,23 @@ import bridge.exception.InvalidMovingException;
 
 public enum Direction {
 
-    UP("U"),
-    DOWN("D");
+    UP("U", new UpDirectionOperation()),
+    DOWN("D", new DownDirectionOperation());
 
-    final String direction;
+    private final String direction;
+    private final DirectionOperation operation;
 
-    Direction(String direction) {
+    Direction(String direction, DirectionOperation operation) {
         this.direction = direction;
+        this.operation = operation;
     }
 
     public String getDirection() {
         return direction;
+    }
+
+    public DirectionOperation getOperation() {
+        return operation;
     }
 
     public static Direction matchDirection(String direction) {

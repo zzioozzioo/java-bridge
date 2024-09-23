@@ -1,7 +1,5 @@
 package bridge.domain;
 
-import bridge.exception.InvalidMovingException;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,29 +21,24 @@ public class BridgeMap {
         return downStatus;
     }
 
-    public void addMap(String direction, String status) {
-        if (upDirection(direction, status)) return;
-        if (downDirection(direction, status)) return;
-
-        throw new InvalidMovingException();
+    public void addMap(DirectionOperation operation, String status) {
+        operation.update(this, status);
     }
 
-    public boolean upDirection(String direction, String status) {
-        if (direction.equals(Direction.UP.getDirection())) {
-            upStatus.add(status);
-            downStatus.add(" ");
-            return true;
-        }
-        return false;
+    public void addUpStatus(String status) {
+        upStatus.add(status);
     }
 
-    public boolean downDirection(String direction, String status) {
-        if (direction.equals(Direction.DOWN.getDirection())) {
-            downStatus.add(status);
-            upStatus.add(" ");
-            return true;
-        }
-        return false;
+    public void addEmptyToUpStatus() {
+        upStatus.add(" ");
+    }
+
+    public void addDownStatus(String status) {
+        downStatus.add(status);
+    }
+
+    public void addEmptyToDownStatus() {
+        downStatus.add(" ");
     }
 
     public boolean containFail(BridgeMap bridgeMap) {
@@ -56,7 +49,7 @@ public class BridgeMap {
     }
 
     public void resetMap() {
-        this.upStatus.clear();
-        this.downStatus.clear();
+        upStatus.clear();
+        downStatus.clear();
     }
 }

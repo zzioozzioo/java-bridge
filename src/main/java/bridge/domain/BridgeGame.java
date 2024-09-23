@@ -50,7 +50,9 @@ public class BridgeGame {
         BridgeMap bridgeMap = bridgeGame.getBridgeMap();
 
         Status status = Status.matchStatus(direction, bridge.get(index));
-        bridgeMap.addMap(direction, status.getStatus());
+        DirectionOperation operation = Direction.matchDirection(direction).getOperation();
+
+        bridgeMap.addMap(operation, status.getStatus());
 
         return bridgeMap;
     }
