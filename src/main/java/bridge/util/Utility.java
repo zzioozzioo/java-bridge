@@ -5,25 +5,25 @@ import bridge.domain.Direction;
 import bridge.exception.InvalidGameCommandException;
 import bridge.exception.InvalidMovingException;
 
+import java.util.Arrays;
 
 public class Utility {
 
-    public static Command matchCommand(String playerCommand) {
-        for (Command cmd : Command.values()) {
-            if (cmd.getCommand().equals(playerCommand)) {
-                return cmd;
-            }
-        }
-        throw new InvalidGameCommandException();
+    private static <T> T match(T[] values, String matchType) {
+        return Arrays.stream(values)
+                .filter(v -> v.toString().equals(matchType))
+                .findFirst()
+                .orElseThrow(InvalidGameCommandException::new);
+    }
+
+    public static Command matchCommand(String command) {
+        return match(Command.values(), command);
     }
 
     public static Direction matchDirection(String direction) {
-        for (Direction d : Direction.values()) {
-            if (d.getDirection().equals(direction)) {
-                return d;
-            }
-        }
-        throw new InvalidMovingException();
+        return match(Direction.values(), direction);
     }
 }
+
+
 
