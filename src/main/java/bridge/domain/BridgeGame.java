@@ -1,6 +1,7 @@
 package bridge.domain;
 
 import java.util.List;
+import java.util.Optional;
 
 import static bridge.util.Utility.matchDirection;
 
@@ -30,10 +31,7 @@ public class BridgeGame {
     }
 
     public BridgeMap getBridgeMap() {
-        if (this.bridgeMap == null) {
-            this.bridgeMap = new BridgeMap();
-        }
-        return this.bridgeMap;
+        return Optional.ofNullable(bridgeMap).orElseGet(BridgeMap::new);
     }
 
     public BridgeGame(List<String> bridge) {
