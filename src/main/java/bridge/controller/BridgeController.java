@@ -11,6 +11,8 @@ import bridge.view.OutputView;
 import java.util.ArrayList;
 import java.util.List;
 
+import static bridge.domain.Result.FAIL;
+import static bridge.domain.Result.SUCCESS;
 import static bridge.util.Utility.*;
 
 public class BridgeController {
@@ -69,7 +71,7 @@ public class BridgeController {
             if (whenFail(bridgeMap, bridgeService.getBridgeGame())) return;
         }
 
-        printEndGame(bridgeService.getBridgeGame(), true);
+        printEndGame(bridgeService.getBridgeGame(), SUCCESS);
     }
 
     public BridgeMap passOneKan(int index, BridgeGame bridgeGame) {
@@ -125,7 +127,7 @@ public class BridgeController {
     }
 
     public void endGame(BridgeGame bridgeGame) {
-        printEndGame(bridgeGame, false);
+        printEndGame(bridgeGame, FAIL);
     }
 
 
@@ -161,12 +163,12 @@ public class BridgeController {
     /**
      * 게임 종료 출력
      */
-    public void printEndGame(BridgeGame bridgeGame, boolean flag) {
+    public void printEndGame(BridgeGame bridgeGame, Result result) {
 
-        String result = matchResult(flag);
+        String flag = result.getResult();
 
         outputView.printResult(bridgeGame.getBridgeMap());
-        outputView.printIsSuccess(result);
+        outputView.printIsSuccess(flag);
         outputView.printTryCount(bridgeGame);
     }
 }

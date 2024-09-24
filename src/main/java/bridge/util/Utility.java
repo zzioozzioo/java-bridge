@@ -6,19 +6,11 @@ import bridge.domain.Status;
 import bridge.exception.InvalidGameCommandException;
 import bridge.exception.InvalidMovingException;
 
-import static bridge.domain.Result.FAIL;
-import static bridge.domain.Result.SUCCESS;
 import static bridge.domain.Status.IMPOSSIBLE;
 import static bridge.domain.Status.POSSIBLE;
 
-public class Utility {
-    public static String matchResult(boolean flag) {
 
-        if (!flag) {
-            return String.valueOf(FAIL.getResult());
-        }
-        return String.valueOf(SUCCESS.getResult());
-    }
+public class Utility {
 
     public static Status matchStatus(String direction, String target) {
 
