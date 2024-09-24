@@ -2,6 +2,9 @@ package bridge.domain;
 
 import java.util.List;
 
+import static bridge.util.Utility.matchDirection;
+import static bridge.util.Utility.matchStatus;
+
 /**
  * 다리 건너기 게임을 관리하는 클래스
  */
@@ -48,12 +51,10 @@ public class BridgeGame {
         int index = bridgeMove.getIndex();
         List<String> bridge = bridgeGame.getBridge();
         BridgeMap bridgeMap = bridgeGame.getBridgeMap();
-
-        Status status = Status.matchStatus(direction, bridge.get(index));
-        DirectionOperation operation = Direction.matchDirection(direction).getOperation();
+        Status status = matchStatus(direction, bridge.get(index));
+        DirectionOperation operation = matchDirection(direction).getOperation();
 
         bridgeMap.addMap(operation, status.getStatus());
-
         return bridgeMap;
     }
 

@@ -3,7 +3,7 @@ package bridge.domain;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static bridge.domain.Result.matchResult;
+import static bridge.util.Utility.matchResult;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ResultTest {

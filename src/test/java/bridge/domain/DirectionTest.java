@@ -4,9 +4,8 @@ import bridge.exception.InvalidMovingException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static bridge.domain.Direction.*;
+import static bridge.util.Utility.matchDirection;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 
 public class DirectionTest {
 

@@ -11,8 +11,7 @@ import bridge.view.OutputView;
 import java.util.ArrayList;
 import java.util.List;
 
-import static bridge.domain.Direction.matchDirection;
-import static bridge.domain.Command.matchCommand;
+import static bridge.util.Utility.*;
 
 public class BridgeController {
 
@@ -164,7 +163,7 @@ public class BridgeController {
      */
     public void printEndGame(BridgeGame bridgeGame, boolean flag) {
 
-        String result = Result.matchResult(flag);
+        String result = matchResult(flag);
 
         outputView.printResult(bridgeGame.getBridgeMap());
         outputView.printIsSuccess(result);

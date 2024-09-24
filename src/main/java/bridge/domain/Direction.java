@@ -22,13 +22,4 @@ public enum Direction {
     public DirectionOperation getOperation() {
         return operation;
     }
-
-    public static Direction matchDirection(String direction) {
-        for (Direction d : Direction.values()) {
-            if (d.getDirection().equals(direction)) {
-                return d;
-            }
-        }
-        throw new InvalidMovingException();
-    }
 }

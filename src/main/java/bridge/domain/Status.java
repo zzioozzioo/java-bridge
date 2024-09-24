@@ -13,11 +13,4 @@ public enum Status {
     public String getStatus() {
         return status;
     }
-
-    public static Status matchStatus(String direction, String target) {
-        if (direction.equals(target)) {
-            return POSSIBLE;
-        }
-        return IMPOSSIBLE;
-    }
 }

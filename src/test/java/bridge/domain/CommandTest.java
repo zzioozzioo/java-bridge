@@ -4,10 +4,8 @@ import bridge.exception.InvalidGameCommandException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static bridge.domain.Command.RESTART;
-import static bridge.domain.Command.matchCommand;
+import static bridge.util.Utility.matchCommand;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CommandTest {

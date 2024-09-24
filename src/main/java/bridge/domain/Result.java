@@ -13,12 +13,4 @@ public enum Result {
     public String getResult() {
         return result;
     }
-
-    public static String matchResult(boolean flag) {
-
-        if (!flag) {
-            return String.valueOf(FAIL.getResult());
-        }
-        return String.valueOf(SUCCESS.getResult());
-    }
 }

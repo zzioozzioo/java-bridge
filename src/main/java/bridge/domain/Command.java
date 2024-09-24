@@ -17,15 +17,6 @@ public enum Command {
         return command;
     }
 
-    public static Command matchCommand(String playerCommand) {
-        for (Command cmd : Command.values()) {
-            if (cmd.getCommand().equals(playerCommand)) {
-                return cmd;
-            }
-        }
-        throw new InvalidGameCommandException();
-    }
-
     public boolean isEqualToRestartCommand(String restartCommand) {
         return this.command.equals(restartCommand);
     }
