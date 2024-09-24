@@ -9,19 +9,19 @@ import java.util.Arrays;
 
 public class Utility {
 
-    private static <T> T match(T[] values, String matchType) {
+    private static <T> T match(T[] values, String matchType, RuntimeException e) {
         return Arrays.stream(values)
                 .filter(v -> v.toString().equals(matchType))
                 .findFirst()
-                .orElseThrow(InvalidGameCommandException::new);
+                .orElseThrow(() -> e);
     }
 
     public static Command matchCommand(String command) {
-        return match(Command.values(), command);
+        return match(Command.values(), command, new InvalidGameCommandException());
     }
 
     public static Direction matchDirection(String direction) {
-        return match(Direction.values(), direction);
+        return match(Direction.values(), direction, new InvalidMovingException());
     }
 }
 
