@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static bridge.util.Utility.matchStatus;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class StatusTest {
@@ -19,7 +18,7 @@ public class StatusTest {
         int index = 0;
 
         //when
-        Status status = matchStatus(direction, bridge.get(index));
+        Status status = Status.POSSIBLE.match(direction, bridge.get(index));
 
         //then
         assertEquals(Status.POSSIBLE, status);
