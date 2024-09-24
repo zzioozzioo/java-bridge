@@ -135,29 +135,25 @@ public class BridgeController {
      * 게임 재시작
      */
     public boolean restartGame() {
-        String gameCommand = readValidGameCommand();
-        Command command = matchCommand(gameCommand);
-
+        Command command = readValidGameCommand();
         return command.isEqualToRestartCommand(Command.RESTART.getCommand());
     }
 
     /**
      * 게임 재시작 여부 입력 유효성 검사
      */
-    public String readValidGameCommand() {
+    public Command readValidGameCommand() {
         while (true) {
             try {
-                String gameCommand = inputView.readGameCommand();
-                isValidGameCommand(gameCommand);
-                return gameCommand;
+                return isValidGameCommand(inputView.readGameCommand());
             } catch (InvalidGameCommandException e) {
                 System.out.println(e.getMessage());
             }
         }
     }
 
-    public void isValidGameCommand(String gameCommand) {
-        matchCommand(gameCommand);
+    public Command isValidGameCommand(String gameCommand) {
+        return matchCommand(gameCommand);
     }
 
     /**
