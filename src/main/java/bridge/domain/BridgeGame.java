@@ -3,7 +3,8 @@ package bridge.domain;
 import java.util.List;
 import java.util.Optional;
 
-import static bridge.util.Utility.matchDirection;
+import static bridge.domain.Direction.matchDirection;
+import static bridge.util.Utility.isEqualStatus;
 
 /**
  * 다리 건너기 게임을 관리하는 클래스
@@ -48,7 +49,7 @@ public class BridgeGame {
         int index = bridgeMove.getIndex();
         List<String> bridge = bridgeGame.getBridge();
         BridgeMap bridgeMap = bridgeGame.getBridgeMap();
-        Status status = Status.POSSIBLE.match(direction, bridge.get(index));
+        Status status = isEqualStatus(direction, bridge.get(index));
         DirectionOperation operation = matchDirection(direction).getOperation();
 
         bridgeMap.addMap(operation, status.getStatus());
