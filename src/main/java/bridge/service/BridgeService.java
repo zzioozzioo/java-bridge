@@ -24,8 +24,8 @@ public class BridgeService {
         bridgeGame.setNewBridge(bridgeMaker.makeBridge(count));
     }
 
-    public BridgeMap processMove(BridgeMove bridgeMove, BridgeGame bridgeGame) {
-        return bridgeGame.move(bridgeMove, bridgeGame);
+    public BridgeMap processMove(BridgeMove bridgeMove) {
+        return bridgeGame.move(bridgeMove);
     }
 
     public boolean isFail(BridgeMap bridgeMap) {

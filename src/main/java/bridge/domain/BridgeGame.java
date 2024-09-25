@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static bridge.domain.Direction.matchDirection;
-import static bridge.util.Utility.isEqualStatus;
+import static bridge.domain.Status.isEqualStatus;
 
 /**
  * 다리 건너기 게임을 관리하는 클래스
@@ -37,6 +37,7 @@ public class BridgeGame {
 
     public BridgeGame(List<String> bridge) {
         this.bridge = bridge;
+        this.bridgeMap = new BridgeMap();
     }
 
     /**
@@ -44,11 +45,9 @@ public class BridgeGame {
      * <p>
      * 이동을 위해 필요한 메서드의 반환 타입(return type), 인자(parameter)는 자유롭게 추가하거나 변경할 수 있다.
      */
-    public BridgeMap move(BridgeMove bridgeMove, BridgeGame bridgeGame) {
+    public BridgeMap move(BridgeMove bridgeMove) {
         String direction = bridgeMove.getDirection();
         int index = bridgeMove.getIndex();
-        List<String> bridge = bridgeGame.getBridge();
-        BridgeMap bridgeMap = bridgeGame.getBridgeMap();
         Status status = isEqualStatus(direction, bridge.get(index));
         DirectionOperation operation = matchDirection(direction).getOperation();
 

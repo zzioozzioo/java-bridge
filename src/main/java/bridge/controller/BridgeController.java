@@ -8,41 +8,34 @@ import bridge.service.BridgeService;
 import bridge.view.InputView;
 import bridge.view.OutputView;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import static bridge.domain.Command.matchCommand;
+import static bridge.domain.Direction.matchDirection;
 import static bridge.domain.Result.FAIL;
 import static bridge.domain.Result.SUCCESS;
-import static bridge.util.Utility.*;
 
 public class BridgeController {
 
     private final InputView inputView = new InputView();
     private final OutputView outputView = new OutputView();
-    private BridgeService bridgeService;
+    private final BridgeService bridgeService;
+
+    public BridgeController(BridgeService bridgeService) {
+        this.bridgeService = bridgeService;
+    }
 
 
     public void run() {
-        List<String> bridge = new ArrayList<>();
-        BridgeGame bridgeGame = new BridgeGame(bridge);
-        bridgeService = new BridgeService(bridgeGame);
-
-        startGame();
-        makeNewBridge(bridgeService);
-        playBridgeGame(bridgeService);
-    }
-
-    /**
-     * 게임 시작
-     */
-    public void startGame() {
         outputView.printStartGame();
+        makeNewBridge();
+        playBridgeGame();
     }
 
     /**
      * 새로운 다리 생성
      */
-    public void makeNewBridge(BridgeService bridgeService) {
+    public void makeNewBridge() {
         while (true) {
             try {
                 int bridgeSize = inputView.readBridgeSize();
@@ -62,28 +55,37 @@ public class BridgeController {
     /**
      * 다리 건너기 시작
      */
-    public void playBridgeGame(BridgeService bridgeService) {
-        BridgeMap bridgeMap;
-        List<String> bridge = bridgeService.getBridgeGame().getBridge();
+    public void playBridgeGame() {
+        BridgeGame bridgeGame = bridgeService.getBridgeGame();
+        List<String> bridge = bridgeGame.getBridge();
 
         for (int i = 0; i < bridge.size(); i++) {
-            bridgeMap = passOneKan(i, bridgeService.getBridgeGame());
-            if (whenFail(bridgeMap, bridgeService.getBridgeGame())) return;
+            if (passOneKan(i)) return;
         }
-
-        printEndGame(bridgeService.getBridgeGame(), SUCCESS);
+        printEndGame(SUCCESS);
     }
 
-    public BridgeMap passOneKan(int index, BridgeGame bridgeGame) {
-        String strDirection = readValidMoving();
-        Direction direction = matchDirection(strDirection);
+    public boolean passOneKan(int index) {
+        Direction direction = matchDirection(readValidMoving());
 
         BridgeMove bridgeMove = new BridgeMove(direction, index);
-        BridgeMap bridgeMap = bridgeService.processMove(bridgeMove, bridgeGame);
+        BridgeMap bridgeMap = bridgeService.processMove(bridgeMove);
 
         outputView.printMap(bridgeMap);
+        return handleFailure(bridgeMap);
+    }
 
-        return bridgeMap;
+    public boolean handleFailure(BridgeMap bridgeMap) {
+        if (!bridgeService.isFail(bridgeMap)) {
+            return false;
+        }
+        if (restartGame()) {
+            bridgeService.restart();
+            playBridgeGame();
+            return true;
+        }
+        printEndGame(FAIL);
+        return true;
     }
 
     /**
@@ -104,32 +106,6 @@ public class BridgeController {
     public void isValidMoving(String moving) {
         matchDirection(moving);
     }
-
-    /**
-     * 게임에 실패한 경우
-     */
-    // TODO: 도메인 로직으로 분리,, 다시 수정해보기
-    public boolean whenFail(BridgeMap bridgeMap, BridgeGame bridgeGame) {
-        if (!bridgeService.isFail(bridgeMap)) {
-            return false;
-        }
-        if (restartGame()) {
-            restartAndPlayAgain();
-            return true;
-        }
-        endGame(bridgeGame);
-        return true;
-    }
-
-    public void restartAndPlayAgain() {
-        bridgeService.restart();
-        playBridgeGame(bridgeService);
-    }
-
-    public void endGame(BridgeGame bridgeGame) {
-        printEndGame(bridgeGame, FAIL);
-    }
-
 
     /**
      * 게임 재시작
@@ -159,12 +135,11 @@ public class BridgeController {
     /**
      * 게임 종료 출력
      */
-    public void printEndGame(BridgeGame bridgeGame, Result result) {
-
-        String flag = result.getResult();
+    public void printEndGame(Result result) {
+        BridgeGame bridgeGame = bridgeService.getBridgeGame();
 
         outputView.printResult(bridgeGame.getBridgeMap());
-        outputView.printIsSuccess(flag);
+        outputView.printIsSuccess(result);
         outputView.printTryCount(bridgeGame);
     }
 }
