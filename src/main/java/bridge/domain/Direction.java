@@ -26,6 +26,12 @@ public enum Direction {
     }
 
     public static Direction matchDirection(String direction) {
-        return match(Direction.values(), direction, new InvalidMovingException());
+//        return match(Direction.values(), direction, new InvalidMovingException());
+        for (Direction d : Direction.values()) {
+            if (d.getDirection().equals(direction)) {
+                return d;
+            }
+        }
+        throw new InvalidMovingException();
     }
 }

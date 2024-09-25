@@ -2,7 +2,6 @@ package bridge.domain;
 
 import bridge.exception.InvalidGameCommandException;
 
-import static bridge.util.Utility.match;
 
 public enum Command {
 
@@ -20,10 +19,16 @@ public enum Command {
     }
 
     public boolean isEqualToRestartCommand(String restartCommand) {
-        return command.equals(restartCommand);
+        return this.command.equals(restartCommand);
     }
 
     public static Command matchCommand(String command) {
-        return match(Command.values(), command, new InvalidGameCommandException());
+//        return match(Command.values(), command, new InvalidGameCommandException());
+        for (Command cmd : Command.values()) {
+            if (cmd.getCommand().equals(command)) {
+                return cmd;
+            }
+        }
+        throw new InvalidGameCommandException();
     }
 }
