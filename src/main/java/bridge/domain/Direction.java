@@ -2,6 +2,8 @@ package bridge.domain;
 
 import bridge.exception.InvalidMovingException;
 
+import static bridge.util.Utility.match;
+
 public enum Direction {
 
     UP("U", new UpDirectionOperation()),
@@ -21,5 +23,9 @@ public enum Direction {
 
     public DirectionOperation getOperation() {
         return operation;
+    }
+
+    public static Direction matchDirection(String direction) {
+        return match(Direction.values(), direction, new InvalidMovingException());
     }
 }
