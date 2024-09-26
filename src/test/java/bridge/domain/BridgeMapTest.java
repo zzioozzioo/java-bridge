@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static bridge.domain.Direction.matchDirection;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -18,11 +19,11 @@ public class BridgeMapTest {
         //given
         BridgeMap bridgeMap = new BridgeMap();
 
-        String direction = "u";
+        String direction = "E";
         String status = "O";
 
         //when & then
-        assertThatThrownBy(() -> bridgeMap.addMap(direction, status))
+        assertThatThrownBy(() -> bridgeMap.addMap(matchDirection(direction).getOperation(), status))
                 .isInstanceOf(InvalidMovingException.class)
                 .hasMessageContaining("[ERROR] 이동할 칸은 "
                         + Direction.UP.getDirection() + " 또는 "
@@ -35,14 +36,15 @@ public class BridgeMapTest {
         //given
         BridgeMap bridgeMap = new BridgeMap();
 
-        String direction = "U";
         String status = "O";
 
         //when
-        bridgeMap.upDirection(direction, status);
+        bridgeMap.addUpStatus(status);
+        bridgeMap.addEmptyToDownStatus();
 
         //then
         assertEquals(List.of("O"), bridgeMap.getUpStatus());
+        assertEquals(List.of(" "), bridgeMap.getDownStatus());
     }
 
     @DisplayName("이동할 칸이 D일 때 맵에 추가 테스트")
@@ -51,14 +53,15 @@ public class BridgeMapTest {
         //given
         BridgeMap bridgeMap = new BridgeMap();
 
-        String direction = "D";
         String status = "X";
 
         //when
-        bridgeMap.downDirection(direction, status);
+        bridgeMap.addDownStatus(status);
+        bridgeMap.addEmptyToUpStatus();
 
         //then
         assertEquals(List.of("X"), bridgeMap.getDownStatus());
+        assertEquals(List.of(" "), bridgeMap.getUpStatus());
     }
 
     @DisplayName("맵에 X가 있는지 테스트")
@@ -66,8 +69,14 @@ public class BridgeMapTest {
     void ContainFailTest() {
         //given
         BridgeMap bridgeMap = new BridgeMap();
-        bridgeMap.addMap("D", "O");
-        bridgeMap.addMap("D", "X");
+
+        String direction1 = "D";
+        String direction2 = "D";
+        DirectionOperation operation1 = matchDirection(direction1).getOperation();
+        DirectionOperation operation2 = matchDirection(direction2).getOperation();
+
+        bridgeMap.addMap(operation1, "O");
+        bridgeMap.addMap(operation2, "X");
 
         //when
         boolean result = bridgeMap.containFail(bridgeMap);
@@ -81,8 +90,14 @@ public class BridgeMapTest {
     void ResetMapTest() {
         //given
         BridgeMap bridgeMap = new BridgeMap();
-        bridgeMap.addMap("D", "O");
-        bridgeMap.addMap("D", "X");
+
+        String direction1 = "D";
+        String direction2 = "D";
+        DirectionOperation operation1 = matchDirection(direction1).getOperation();
+        DirectionOperation operation2 = matchDirection(direction2).getOperation();
+
+        bridgeMap.addMap(operation1, "O");
+        bridgeMap.addMap(operation2, "X");
 
         //when
         bridgeMap.resetMap();
