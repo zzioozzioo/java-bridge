@@ -15,24 +15,23 @@ public class BridgeGameTest {
     @Test
     void MoveTest() {
         //given
-        // 다리 생성
         List<String> bridge = List.of("D", "U", "D");
         BridgeGame bridgeGame = new BridgeGame(bridge);
 
-        // 플레이어의 첫 번째 이동
+        // 첫 번째 이동
         Direction firstDirection = Direction.DOWN;
         int firstIndex = 0;
         BridgeMove firstMove = new BridgeMove(firstDirection, firstIndex);
 
-        // 플레이어의 두 번째 이동
+        // 두 번째 이동
         Direction secondDirection = Direction.UP;
         int secondIndex = 1;
         BridgeMove secondMove = new BridgeMove(secondDirection, secondIndex);
 
         //when
         BridgeMap bridgeMap;
-        bridgeGame.move(firstMove, bridgeGame);
-        bridgeMap = bridgeGame.move(secondMove, bridgeGame);
+        bridgeGame.move(firstMove);
+        bridgeMap = bridgeGame.move(secondMove);
 
 
         //then
@@ -47,15 +46,12 @@ public class BridgeGameTest {
         List<String> bridge = List.of("U", "U", "D");
         BridgeGame bridgeGame = new BridgeGame(bridge);
 
-        // 플레이어가 시도한 입력
         BridgeMove firstMove = new BridgeMove(Direction.UP, 0);
         BridgeMove secondMove = new BridgeMove(Direction.DOWN, 1);
 
         //when
-        // 이동
-        bridgeGame.move(firstMove, bridgeGame);
-        bridgeGame.move(secondMove, bridgeGame);
-        //재시도
+        bridgeGame.move(firstMove);
+        bridgeGame.move(secondMove);
         bridgeGame.retry();
 
         //then
